@@ -192,7 +192,7 @@ class DeployZipCommand(sublime_plugin.WindowCommand):
 		thePath = None
 		
 		for path in userPaths:
-			if self.window.activeView().file_name().startswith(path):
+			if self.window.view.file_name().startswith(path):
 				thePath = path
 				break
 		else:
