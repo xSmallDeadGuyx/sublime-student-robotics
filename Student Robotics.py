@@ -10,7 +10,6 @@ import zipfile
 import fnmatch
 import re
 import glob
-import json
 
 WINDOWS = os.name == 'nt'
 if WINDOWS:
@@ -201,55 +200,6 @@ class DeployZipCommand(sublime_plugin.WindowCommand):
 		sublime.status_message('Exporting from %s...'%thePath)
 
 		self.showDriveList(drives, lambda d: self.onDriveChosen(d, thePath))
-
-class DeployCurrentFileCommand(DeployZipCommand):
-	def is_enabled(self):
-		self.currentView = None
-		self.start()
-		return DeployZipCommand.is_enabled(self)
-
-	@property
-	def currentFile(self):
-		return self.currentView.file_name() if self.currentView else ''
-
-	def start(self):
-		"""Load the current file when run, or checking if runnable"""
-		self.currentView = self.window.active_view()
-
-	def getProjectFolders(self):
-		allFolders = DeployZipCommand.getProjectFolders(self)
-		return [folder for folder in allFolders if self.currentFile.startswith(folder)]
-
-	def onDriveChosen(self, drive, target):
-		configPath = os.path.join(target, 'config.json')
-		config = {}
-		try:
-			with open(configPath, 'r') as f:
-				config = json.load(f)
-		except:
-			sublime.status_message('config.json not found - creating new file')
-
-		
-		config["execute"] = '.'.join(re.split(r'\\|/', self.currentFile[len(target)+1:-3]))
-
-		with open(configPath, 'w') as f:
-			json.dump(config, f, indent=4)
-
-		DeployZipCommand.onDriveChosen(self, drive, target)
-
-	def run(self):
-		if self.start():
-			if self.currentView.is_dirty():
-				if sublime.ok_cancel_dialog("File not saved! Save?"):
-					self.currentView.run_command("save")
-				else:
-					return
-
-			if not self.currentView.find(r'^def main\(.*\):', 0):
-				sublime.error_message("Can't deploy - no main method found!")
-				return
-
-			DeployZipCommand.run(self)
 
 
 class ShowLogCommand(sublime_plugin.WindowCommand):

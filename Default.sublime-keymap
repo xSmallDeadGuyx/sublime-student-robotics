@@ -1,5 +1,3 @@
 [
-	{"keys": ["ctrl+shift+f5"], "command": "deploy_zip"},
-	{"keys": ["ctrl+f5"], "command": "deploy_current_file"}
-
+	{"keys": ["ctrl+f5"], "command": "deploy_zip"}
 ]
