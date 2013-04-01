@@ -98,10 +98,6 @@ class DeployZipCommand(sublime_plugin.WindowCommand):
 		self.settings = None
 		sublime_plugin.WindowCommand.__init__(self, *args, **kwargs)
 
-	@property
-	def currentFile(self):
-		return self.currentView.file_name() if self.currentView else ''
-
 	def is_enabled(self):
 		return bool(self.getProjectFolders())
 
@@ -196,7 +192,7 @@ class DeployZipCommand(sublime_plugin.WindowCommand):
 		thePath = None
 		
 		for path in userPaths:
-			if self.currentFile.startswith(path):
+			if self.window.activeView().file_name().startswith(path):
 				thePath = path
 				break
 		else:
