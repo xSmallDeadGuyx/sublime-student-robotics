@@ -165,7 +165,7 @@ class DeployZipCommand(sublime_plugin.WindowCommand):
 		return [
 			subfolder
 			for subfolder, x, y in os.walk(folder)
-				for folder in windows.folders()
+				for folder in self.window.folders()
 					if path.exists(path.join(subfolder, '.git')) and path.exists(path.join(subfolder, 'robot.py'))
 		]
 
