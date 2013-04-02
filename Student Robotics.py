@@ -160,10 +160,13 @@ class DeployZipCommand(sublime_plugin.WindowCommand):
 
 	def getProjectFolders(self):
 		"""Find potential SR code locations"""
+		for folder in self.window.folders():
+			print folder
 		return [
-			folder
-			for folder in self.window.folders()
-			if path.exists(path.join(folder, '.git')) and path.exists(path.join(folder, 'robot.py'))
+			subfolder
+			for subfolder, x, y in os.walk(folder)
+				for folder in windows.folders()
+					if path.exists(path.join(subfolder, '.git')) and path.exists(path.join(subfolder, 'robot.py'))
 		]
 
 	def onDriveChosen(self, drive, target):
